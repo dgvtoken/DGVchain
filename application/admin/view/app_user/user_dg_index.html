@@ -1,0 +1,89 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="__ADMIN__/favicon.ico">
+    <link rel="Shortcut Icon" href="__ADMIN__/favicon.ico"/>
+    {include file="../application/admin/view/header.html" /}
+    <title>app用户DG锁仓</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> app用户管理 <span
+        class="c-gray en">&gt;</span> app用户DG锁仓 <a class="btn btn-success radius r"
+                                                   style="line-height:1.6em;margin-top:3px"
+                                                   href="javascript:location.replace(location.href);" title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div class="text-c">
+        <form action="{:url('admin/app_user/user_dg_index')}" method="get">
+            <p style="class:input-text Wdate;width:120px;float:left;line-height:2.5em">
+                每页显示数量</p>
+            &nbsp;&nbsp;
+            <select class="input-text Wdate" style="float:left;width:100px;" name="num">
+                <option value="20" {if condition="$num eq 20" }selected{
+                /if}>20</option>
+                <option value="5" {if condition="$num eq 5" }selected{
+                /if}>5</option>
+                <option value="10" {if condition="$num eq 10" }selected{
+                /if}>10</option>
+                <option value="15" {if condition="$num eq 15" }selected{
+                /if}>10</option>
+            </select>
+            <input type="text" class="input-text" style="width:250px" placeholder="输入关键字" name="keyword"
+                   value="{$keyword}">
+            <button type="submit" class="btn btn-success" name=""><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
+        </form>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="r">共有数据：<strong>2</strong> 条</span></div>
+    <table class="table table-border table-bordered table-bg table-sort">
+        <thead>
+        <tr>
+            <th scope="col" colspan="9">app用户DG锁仓</th>
+        </tr>
+        <tr class="text-c">
+            <th width="40">记录ID</th>
+            <th width="40">手机号</th>
+            <th width="40">昵称</th>
+            <th width="150">币种</th>
+            <th width="150">可用资产</th>
+            <th width="150">冻结资产</th>
+            <th width="150">是否达到15w</th>
+            <th width="100">更新时间</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach name="$result['user_list']" item="vo"}
+        <tr class="text-c">
+            <td>{$vo.id}</td>
+            <td>{$vo.mobile}</td>
+            <td>{$vo.nickname}</td>
+            <td>{$vo.asset_code}</td>
+            <td>{$vo.amount_available}</td>
+            <td>{$vo.amount_frozen}</td>
+            {eq name="vo.enough_money" value="1"}
+            <td class="td-status"><span class="label label-success radius">达到15w</span></td>
+            {else/}
+            <td class="td-status"><span class="label radius">未达到15w</span></td>
+            {/eq}
+            <td>{$vo.update_time/1000|date="Y-m-d H:i:s",###}</td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+</div>
+<!--_footer 作为公共模版分离出去-->
+{include file="../application/admin/view/footer.html" /}
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ADMIN__/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__ADMIN__/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="__ADMIN__/lib/laypage/1.2/laypage.js"></script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="__ADMIN__/favicon.ico">
+    <link rel="Shortcut Icon" href="__ADMIN__/favicon.ico"/>
+    {include file="../application/admin/view/header.html" /}
+    <title>提现请求</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> app用户管理 <span
+        class="c-gray en">&gt;</span> 提现请求 <a class="btn btn-success radius r"
+                                              style="line-height:1.6em;margin-top:3px"
+                                              href="javascript:location.replace(location.href);" title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+
+    <div class="text-c">
+        <form action="{:url('admin/wallet/withdraw')}" method="get">
+            <p style="class:input-text Wdate;width:120px;float:left;line-height:2.5em">
+                每页显示数量</p>
+            &nbsp;&nbsp;
+            <select class="input-text Wdate" style="float:left;width:100px;" name="num">
+                <option value="20" {if condition="$num eq 20" }selected{
+                /if}>20</option>
+                <option value="5" {if condition="$num eq 5" }selected{
+                /if}>5</option>
+                <option value="10" {if condition="$num eq 10" }selected{
+                /if}>10</option>
+                <option value="15" {if condition="$num eq 15" }selected{
+                /if}>10</option>
+            </select>
+            <input type="text" class="input-text" style="width:250px" placeholder="输入关键字" name="keyword"
+                   value="{$keyword}">
+            <button type="submit" class="btn btn-success" name=""><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
+        </form>
+    </div>
+
+
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="r">共有数据：<strong>{$result['withdraw_count']}</strong> 条</span></div>
+    <table class="table table-border table-bordered table-bg table-sort">
+        <thead>
+        <tr>
+            <th scope="col" colspan="12">提现请求</th>
+        </tr>
+        <tr class="text-c">
+            <th width="40">ID</th>
+            <th width="90">接受账户</th>
+            <th width="150">手机号</th>
+            <th width="150">昵称</th>
+            <th width="150">提现金额</th>
+            <th width="150">手续费</th>
+            <th width="150">memo</th>
+            <th width="150">是否需要审核</th>
+            <th width="150">审核状态</th>
+            <th width="130">提现状态</th>
+            <th width="130">提现时间</th>
+            <th width="100">更新时间</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach name="$result['withdraw_list']" item="vo"}
+        <tr class="text-c">
+            <td>{$vo.id}</td>
+            <td>{$vo.to_account}</td>
+            <td>{$vo.mobile}</td>
+            <td>{$vo.nickname}</td>
+            <td style="color: #b94a48;">{$vo.amount}</td>
+            <td>{$vo.fee_amount}</td>
+            <td>{$vo.memo}</td>
+            {switch name='vo.need_audit'}
+            {case value='YES'}
+            <td><span class="btn btn-danger radius">需要审核</span></td>
+            {/case}
+            {default /}
+            <td><span class="btn btn-warning radius">不用审核</span></td>
+            {/switch}
+
+
+            {switch name='vo.audit_status'}
+            {case value='PASS'}
+            <td><span class="btn btn-primary radius">通过</span></td>
+            {/case}
+            {case value='FAIL'}
+            <td><span class="btn btn-danger radius">拒绝</span></td>
+            {/case}
+            {default /}
+            <td><span class="btn btn-warning radius">等待审核</span></td>
+            {/switch}
+
+            {switch name='vo.withdraw_status'}
+            {case value='SUCCESS'}
+            <td><span class="btn btn-success radius">成功</span></td>
+            {/case}
+            {case value='FAIL'}
+            <td><span class="btn btn-danger radius">失败</span></td>
+            {/case}
+            {default /}
+            <td><span class="btn btn-warning radius">确认中</span></td>
+            {/switch}
+            <td>{$vo.create_time/1000|date="Y-m-d H:i:s",###}</td>
+            <td>{$vo.update_time/1000|date="Y-m-d H:i:s",###}</td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+
+    <style type="text/css">
+        #pages {
+            height: 20px;
+            width: 800px;
+            /*float: right;*/
+        }
+
+        #pages a {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            color: #337ab7;
+            float: left;
+            line-height: 1.42857;
+            margin-left: -1px;
+            padding: 6px 12px;
+            position: relative;
+            text-decoration: none;
+        }
+
+        #pages span {
+            display: block;
+            border: 1px solid #ddd;
+            float: left;
+            line-height: 1.42857;
+            margin-left: -1px;
+            padding: 6px 12px;
+            position: relative;
+            text-decoration: none;
+            background-color: #337ab7;
+            border-color: #337ab7;
+            color: #fff;
+            cursor: default;
+            z-index: 2;
+        }
+    </style>
+    <br>
+    <div id="pages">
+        {$pages}
+    </div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+{include file="../application/admin/view/footer.html" /}
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ADMIN__/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__ADMIN__/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="__ADMIN__/lib/laypage/1.2/laypage.js"></script>
+</body>
+</html>
